@@ -10,7 +10,7 @@ interface ContainerProps {
 }
 
 export const Container = styled.div<ContainerProps>`
-  background: #232129;
+  background: #4fc1e9;
   border-radius: 10px;
   padding: 16px;
   width: 100%;
@@ -21,8 +21,8 @@ export const Container = styled.div<ContainerProps>`
     margin-top: 8px;
   }
 
-  color: #666360;
-  border: 2px solid #232129;
+  color: #f5f7fa;
+  border: 2px solid #bfdeff;
 
   ${props =>
     props.isErrored &&
@@ -33,14 +33,14 @@ export const Container = styled.div<ContainerProps>`
   ${props =>
     props.isFocused &&
     css`
-      color: #ff9000;
-      border-color: #ff9000;
+      color: #ffc170;
+      border-color: #ffc170;
     `}
 
   ${props =>
     props.isFilled &&
     css`
-      color: #ff9000;
+      color: #fff;
     `}
 
 
@@ -48,10 +48,10 @@ export const Container = styled.div<ContainerProps>`
     flex: 1;
     border: 0;
     background: transparent;
-    color: #f4ede8;
+    color: #fff;
 
     &::placeholder {
-      color: #666360;
+      color: #f5f7fa;
     }
 
     & + input {
