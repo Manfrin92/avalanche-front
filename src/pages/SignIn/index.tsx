@@ -14,7 +14,15 @@ import { useToast } from '../../context/ToastContext';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import { Container, Title, Bold, Content, AnimationContainer } from './styles';
+import {
+  Container,
+  Title,
+  ButtonContainer,
+  Bold,
+  Content,
+  AnimationContainer,
+  Background,
+} from './styles';
 
 interface DataProps {
   email: string;
@@ -78,36 +86,28 @@ const SignIn: React.FC = () => {
               <Bold> Amor </Bold>
             </Title>
 
-            <Input name="email" icon={FiMail} placeholder="E-mail" />
-            <Input
-              name="password"
-              icon={FiLock}
-              type="password"
-              placeholder="Senha"
-            />
+            <ButtonContainer>
+              <Button
+                backgroundColor="#ED5565"
+                text="ENTRAR"
+                textColor="#FFF"
+                type="submit"
+              />
 
-            <Button
-              backgroundColor="#ED5565"
-              text="ENTRAR"
-              textColor="#FFF"
-              type="submit"
-            />
+              <Button
+                backgroundColor="#FFF"
+                text="CADASTRAR"
+                textColor="#ED5565"
+                type="submit"
+                borderColor="black"
+              />
 
-            <Button
-              backgroundColor="#FFF"
-              text="CADASTRAR"
-              textColor="#ED5565"
-              type="submit"
-              borderColor="black"
-            />
-
-            <a href="ff">Esqueci minha senha</a>
+              <a href="ff">Esqueci minha senha</a>
+            </ButtonContainer>
           </Form>
-          <FiLogIn />
-          Criar conta
         </AnimationContainer>
       </Content>
-      {/* <Background /> */}
+      <Background />
     </Container>
   );
 };
