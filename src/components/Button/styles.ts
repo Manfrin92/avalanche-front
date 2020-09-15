@@ -16,7 +16,7 @@ export const Container = styled.button<ButtonProps>`
   height: 48px;
   border-radius: 10px;
   padding: 0 16px;
-  width: 90%;
+  width: 100%;
   font-weight: 500;
   margin-top: 16px;
   transition: background-color 0.2s;

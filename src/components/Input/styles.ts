@@ -10,7 +10,8 @@ interface ContainerProps {
 }
 
 export const Container = styled.div<ContainerProps>`
-  background: #4fc1e9;
+  background: #f9f9f9;
+  border: 2px solid #ed5565;
   border-radius: 10px;
   padding: 16px;
   width: 100%;
@@ -21,8 +22,7 @@ export const Container = styled.div<ContainerProps>`
     margin-top: 8px;
   }
 
-  color: #f5f7fa;
-  border: 2px solid #bfdeff;
+  color: #ed5565;
 
   ${props =>
     props.isErrored &&
@@ -51,7 +51,7 @@ export const Container = styled.div<ContainerProps>`
     color: #fff;
 
     &::placeholder {
-      color: #f5f7fa;
+      color: #ed5565;
     }
 
     & + input {

@@ -85,9 +85,8 @@ const SignUp: React.FC = () => {
       <Content>
         <AnimationContainer>
           <Form ref={formRef} onSubmit={handleSubmit}>
-            <h1>Faça seu cadasto </h1>
-
-            <Input name="name" icon={FiUser} placeholder="Nome" />
+            {/* Primeira parte */}
+            {/* <Input name="name" icon={FiUser} placeholder="Nome" />
             <Input name="email" icon={FiMail} placeholder="E-mail" />
             <Input name="cpf" icon={FiCreditCard} placeholder="CPF" />
             <Input
@@ -100,18 +99,59 @@ const SignUp: React.FC = () => {
               icon={FiLock}
               type="password"
               placeholder="Senha"
+            /> */}
+            {/* Segunda parte */}
+
+            <Input name="cep" icon={FiUser} placeholder="CEP" />
+            <Input name="street" icon={FiMail} placeholder="RUA" />
+            <Input
+              name="streetNumber"
+              icon={FiCreditCard}
+              placeholder="NÚMERO"
             />
+            <Input
+              name="streetComplement"
+              icon={AiOutlineWhatsApp}
+              placeholder="COMPLEMENTO"
+            />
+            <Input
+              name="bairro"
+              icon={FiLock}
+              type="password"
+              placeholder="BAIRRO"
+            />
+            <Input
+              name="city"
+              icon={FiLock}
+              type="password"
+              placeholder="CIDADE"
+            />
+            <Input
+              name="state"
+              icon={FiLock}
+              type="password"
+              placeholder="ESTADO"
+            />
+
+            {/* Terceira Parte - TUDO OPCIONAL, E CLICÁVEL */}
+
             <Button
               textColor="#DA4453"
-              text="Cadastrar"
+              text="VOLTAR"
               backgroundColor="#f9f9f9"
+              type="submit"
+              borderColor="#DA4453"
+            />
+            <Button
+              textColor="#f9f9f9"
+              text="PRÓXIMO"
+              backgroundColor="#DA4453"
               type="submit"
               borderColor="#DA4453"
             />
           </Form>
           {/* <Link to="/"> */}
-          <FiArrowLeft />
-          Voltar para login
+
           {/* </Link> */}
         </AnimationContainer>
       </Content>

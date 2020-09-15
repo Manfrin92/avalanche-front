@@ -1,10 +1,9 @@
 import React, { useRef, useCallback } from 'react';
-import { FiMail, FiLock } from 'react-icons/fi';
+import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
-
 import getValidationErros from '../../utils/getValidationErros';
 
 import logoImg from '../../assets/loginregister.svg';
@@ -19,7 +18,6 @@ import {
   Container,
   Title,
   ButtonContainer,
-  InputContainer,
   Bold,
   Content,
   AnimationContainer,
@@ -31,7 +29,7 @@ interface DataProps {
   password: string;
 }
 
-const SignIn: React.FC = () => {
+const PreSignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { signIn } = useAuth();
   const { addToast } = useToast();
@@ -84,14 +82,11 @@ const SignIn: React.FC = () => {
           <Form ref={formRef} onSubmit={handleSubmit}>
             <Title>
               Avalanche
-              <br /> de
-              <Bold> Amor </Bold>
+              <br />
+{' '}
+de
+<Bold> Amor </Bold>
             </Title>
-
-            <InputContainer>
-              <Input name="email" placeholder="E-mail" icon={FiMail} />
-              <Input name="senha" placeholder="Senha" icon={FiLock} />
-            </InputContainer>
 
             <ButtonContainer>
               <Button
@@ -99,6 +94,14 @@ const SignIn: React.FC = () => {
                 text="ENTRAR"
                 textColor="#FFF"
                 type="submit"
+              />
+
+              <Button
+                backgroundColor="#FFF"
+                text="CADASTRAR"
+                textColor="#ED5565"
+                type="submit"
+                borderColor="black"
               />
 
               <a href="ff">Esqueci minha senha</a>
@@ -111,4 +114,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default PreSignIn;

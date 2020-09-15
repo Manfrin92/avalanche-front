@@ -11,7 +11,11 @@ export const Container = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
-  margin-top: 15%;
+  /* margin-top: 2%; */
+`;
+
+export const InputContainer = styled.div`
+  margin-top: 10%;
 `;
 
 export const Content = styled.div`
