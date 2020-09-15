@@ -5,7 +5,6 @@ import { shade } from 'polished';
 
 export const Container = styled.div`
   height: 100vh;
-
   display: flex;
   align-items: stretch;
 `;
@@ -81,6 +80,16 @@ export const AnimationContainer = styled.div`
       }
     }
   }
+`;
+
+export const Title = styled.text`
+  font-weight: normal;
+  font-size: 32px;
+`;
+
+export const Bold = styled.text`
+  font-weight: bold;
+  font-size: 32px;
 `;
 
 // export const Background = styled.div`

@@ -101,7 +101,13 @@ const SignUp: React.FC = () => {
               type="password"
               placeholder="Senha"
             />
-            <Button type="submit">Cadastrar</Button>
+            <Button
+              textColor="#DA4453"
+              text="Cadastrar"
+              backgroundColor="#f9f9f9"
+              type="submit"
+              borderColor="#DA4453"
+            />
           </Form>
           {/* <Link to="/"> */}
           <FiArrowLeft />

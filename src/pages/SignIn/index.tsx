@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
 import getValidationErros from '../../utils/getValidationErros';
 
-// import logoImg from '../../assets/logo.svg';
+import logoImg from '../../assets/loginregister.svg';
 
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
@@ -14,7 +14,7 @@ import { useToast } from '../../context/ToastContext';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import { Container, Content, AnimationContainer } from './styles';
+import { Container, Title, Bold, Content, AnimationContainer } from './styles';
 
 interface DataProps {
   email: string;
@@ -70,10 +70,13 @@ const SignIn: React.FC = () => {
     <Container>
       <Content>
         <AnimationContainer>
-          {/* <img src={logoImg} alt="Gobarber logo" /> */}
-
+          <img src={logoImg} alt="Avalanche logo" />
           <Form ref={formRef} onSubmit={handleSubmit}>
-            <h1>Faça seu logon</h1>
+            <Title>
+              Avalanche
+              <br /> de
+              <Bold> Amor </Bold>
+            </Title>
 
             <Input name="email" icon={FiMail} placeholder="E-mail" />
             <Input
@@ -83,15 +86,25 @@ const SignIn: React.FC = () => {
               placeholder="Senha"
             />
 
-            <Button type="submit">Entrar</Button>
+            <Button
+              backgroundColor="#ED5565"
+              text="ENTRAR"
+              textColor="#FFF"
+              type="submit"
+            />
+
+            <Button
+              backgroundColor="#FFF"
+              text="CADASTRAR"
+              textColor="#ED5565"
+              type="submit"
+              borderColor="black"
+            />
 
             <a href="ff">Esqueci minha senha</a>
           </Form>
-
-          <Link to="/signup">
-            <FiLogIn />
-            Criar conta
-          </Link>
+          <FiLogIn />
+          Criar conta
         </AnimationContainer>
       </Content>
       {/* <Background /> */}
