@@ -20,7 +20,14 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import api from '../../services/api';
 
-import { Container, Content, AnimationContainer, Background } from './styles';
+import {
+  Container,
+  Content,
+  AnimationContainer,
+  Background,
+  ButtonContainer,
+  Header,
+} from './styles';
 
 interface DataProps {
   name: string;
@@ -84,9 +91,12 @@ const SignUp: React.FC = () => {
       <Background />
       <Content>
         <AnimationContainer>
+          <Header>
+            <text>Cabe</text>
+          </Header>
           <Form ref={formRef} onSubmit={handleSubmit}>
             {/* Primeira parte */}
-            {/* <Input name="name" icon={FiUser} placeholder="Nome" />
+            <Input name="name" icon={FiUser} placeholder="Nome" />
             <Input name="email" icon={FiMail} placeholder="E-mail" />
             <Input name="cpf" icon={FiCreditCard} placeholder="CPF" />
             <Input
@@ -99,10 +109,31 @@ const SignUp: React.FC = () => {
               icon={FiLock}
               type="password"
               placeholder="Senha"
-            /> */}
-            {/* Segunda parte */}
+            />
 
-            <Input name="cep" icon={FiUser} placeholder="CEP" />
+            <ButtonContainer>
+              <Button
+                textColor="#DA4453"
+                text="VOLTAR"
+                backgroundColor="#f9f9f9"
+                type="submit"
+                borderColor="#DA4453"
+                width="34"
+              />
+              <Button
+                textColor="#f9f9f9"
+                text="PRÓXIMO"
+                backgroundColor="#DA4453"
+                type="submit"
+                borderColor="#DA4453"
+                width="65"
+              />
+            </ButtonContainer>
+          </Form>
+
+          {/* Segunda parte */}
+
+          {/* <Input name="cep" icon={FiUser} placeholder="CEP" />
             <Input name="street" icon={FiMail} placeholder="RUA" />
             <Input
               name="streetNumber"
@@ -131,25 +162,10 @@ const SignUp: React.FC = () => {
               icon={FiLock}
               type="password"
               placeholder="ESTADO"
-            />
+            /> */}
 
-            {/* Terceira Parte - TUDO OPCIONAL, E CLICÁVEL */}
+          {/* Terceira Parte - TUDO OPCIONAL, E CLICÁVEL */}
 
-            <Button
-              textColor="#DA4453"
-              text="VOLTAR"
-              backgroundColor="#f9f9f9"
-              type="submit"
-              borderColor="#DA4453"
-            />
-            <Button
-              textColor="#f9f9f9"
-              text="PRÓXIMO"
-              backgroundColor="#DA4453"
-              type="submit"
-              borderColor="#DA4453"
-            />
-          </Form>
           {/* <Link to="/"> */}
 
           {/* </Link> */}

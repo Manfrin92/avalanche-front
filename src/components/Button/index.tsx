@@ -7,6 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
   textColor: string;
   borderColor?: string;
+  width?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({

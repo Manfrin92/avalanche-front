@@ -8,13 +8,25 @@ export const Container = styled.div`
   display: flex;
   align-items: stretch;
 `;
+export const Header = styled.div`
+  width: 100%;
+  height: 10px;
+  align-items: center;
+  background-color: black;
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 
 export const Content = styled.div`
+  /* margin-top: -5%; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   width: 100%;
   max-width: 700px;
 
