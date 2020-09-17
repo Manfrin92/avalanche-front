@@ -8,11 +8,11 @@ export const Container = styled.div`
   display: flex;
   align-items: stretch;
 `;
-export const Header = styled.div`
+export const HeaderContainer = styled.div`
   width: 100%;
   height: 10px;
   align-items: center;
-  background-color: black;
+  margin-bottom: 32px;
 `;
 
 export const ButtonContainer = styled.div`

@@ -18,6 +18,7 @@ import { useToast } from '../../context/ToastContext';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import Header from '../../components/Header';
 import api from '../../services/api';
 
 import {
@@ -26,7 +27,7 @@ import {
   AnimationContainer,
   Background,
   ButtonContainer,
-  Header,
+  HeaderContainer,
 } from './styles';
 
 interface DataProps {
@@ -91,9 +92,9 @@ const SignUp: React.FC = () => {
       <Background />
       <Content>
         <AnimationContainer>
-          <Header>
-            <text>Cabe</text>
-          </Header>
+          {/* <HeaderContainer> */}
+          <Header formPart="1" />
+          {/* </HeaderContainer> */}
           <Form ref={formRef} onSubmit={handleSubmit}>
             {/* Primeira parte */}
             <Input name="name" icon={FiUser} placeholder="Nome" />
