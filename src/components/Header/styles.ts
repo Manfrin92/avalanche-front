@@ -3,22 +3,21 @@ import styled, { css } from 'styled-components';
 import { shade } from 'polished';
 
 export const Container = styled.div`
-  /*flex: 1;
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
-   align-items: center;
-  justify-content: center;
+  align-items: center;
   height: 48px;
   width: 100%;
   margin-top: 16px;
-  border-bottom: 2px solid #ccd1d9; */
-  background-color: black;
+  border-bottom: 2px solid #ccd1d9;
 `;
 
 export const LeftSideContainer = styled.div`
-  background-color: yellow;
-  align-self: flex-start;
+  display: flex;
   flex-direction: row;
+  align-self: center;
+  justify-content: center;
   /* height: 48px;
   width: 100%;
   margin-top: 16px;
@@ -27,9 +26,11 @@ export const LeftSideContainer = styled.div`
 
 export const Text = styled.text`
   color: #434a54;
+  padding-left: 10%;
+  align-self: center;
 `;
 
 export const CurrentPart = styled.text`
   color: #4a89dc;
-  align-self: flex-end;
+  align-self: center;
 `;

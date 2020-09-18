@@ -11,10 +11,10 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ formPart }) => {
   return (
     <Container>
-      {/* <LeftSideContainer> */}
-      <img src={logoImg} alt="Avalanche logo" width="32" height="28" />
-      <Text>Cadastro</Text>
-      {/* </LeftSideContainer> */}
+      <LeftSideContainer>
+        <img src={logoImg} alt="Avalanche logo" width="32" height="28" />
+        <Text>Cadastro</Text>
+      </LeftSideContainer>
 
       <CurrentPart>
         {formPart}
