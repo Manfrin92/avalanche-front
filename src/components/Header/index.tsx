@@ -1,19 +1,30 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 
 import logoImg from '../../assets/loginregister.svg';
 
-import { Container, Text, CurrentPart, LeftSideContainer } from './styles';
+import {
+  Container,
+  Title,
+  TitlePart,
+  CurrentPart,
+  LeftSideContainer,
+} from './styles';
 
 interface HeaderProps {
+  title?: string;
   formPart: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ formPart }) => {
+const Header: React.FC<HeaderProps> = ({ formPart, title }) => {
   return (
     <Container>
       <LeftSideContainer>
         <img src={logoImg} alt="Avalanche logo" width="32" height="28" />
-        <Text>Cadastro</Text>
+        <>
+          <Title> Cadastro </Title>
+          <TitlePart> {title} </TitlePart>
+        </>
       </LeftSideContainer>
 
       <CurrentPart>
