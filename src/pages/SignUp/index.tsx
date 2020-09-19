@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-nested-ternary */
 import React, { useCallback, useRef, useState } from 'react';
 import { FiMail, FiLock, FiUser, FiCreditCard } from 'react-icons/fi';
@@ -12,6 +13,7 @@ import getValidationErros from '../../utils/getValidationErros';
 import { useToast } from '../../context/ToastContext';
 
 import Input from '../../components/Input';
+import InputCheckbox from '../../components/InputCheckbox';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
 // import api from '../../services/api';
@@ -22,6 +24,8 @@ import {
   AnimationContainer,
   Background,
   ButtonContainer,
+  CheckBoxContainer,
+  ThirdPartTitle,
 } from './styles';
 
 interface DataProps {
@@ -203,25 +207,6 @@ const SignUp: React.FC = () => {
                 type="password"
                 placeholder="Senha"
               />
-
-              <ButtonContainer>
-                <Button
-                  textColor="#DA4453"
-                  text="VOLTAR"
-                  backgroundColor="#f9f9f9"
-                  type="submit"
-                  borderColor="#DA4453"
-                  width="34"
-                />
-                <Button
-                  textColor="#f9f9f9"
-                  text="PRÓXIMO"
-                  backgroundColor="#DA4453"
-                  type="submit"
-                  borderColor="#DA4453"
-                  width="65"
-                />
-              </ButtonContainer>
             </Form>
           ) : formStage === '2' ? (
             <Form ref={secondPartRef} onSubmit={handleSubmitSecondPart}>
@@ -229,9 +214,9 @@ const SignUp: React.FC = () => {
               <Input name="street" placeholder="RUA" />
               <Input name="streetNumber" placeholder="NÚMERO" />
               <Input name="streetComplement" placeholder="COMPLEMENTO" />
-              <Input name="bairro" type="password" placeholder="BAIRRO" />
-              <Input name="city" type="password" placeholder="CIDADE" />
-              <Input name="state" type="password" placeholder="ESTADO" />
+              <Input name="bairro" placeholder="BAIRRO" />
+              <Input name="city" placeholder="CIDADE" />
+              <Input name="state" placeholder="ESTADO" />
 
               <ButtonContainer>
                 <Button
@@ -254,9 +239,109 @@ const SignUp: React.FC = () => {
             </Form>
           ) : (
             <Form ref={thirdPartRef} onSubmit={handleSubmitThirdPart}>
-              <Input name="others" placeholder="OUTROS" />
+              <ThirdPartTitle>Posso ajudar sendo</ThirdPartTitle>
+
+              <CheckBoxContainer>
+                <input type="checkbox" id="cook" name="cook" value="cook" />
+                <label htmlFor="cook"> Cozinheiro (a)</label>
+                <br />
+                <input
+                  type="checkbox"
+                  id="driver"
+                  name="driver"
+                  value="driver"
+                />
+                <label htmlFor="driver"> Motorista</label>
+                <br />
+                <input
+                  type="checkbox"
+                  id="doctor"
+                  name="doctor"
+                  value="doctor"
+                />
+                <label htmlFor="doctor"> Médico (a)</label>
+                <br />
+                <input type="checkbox" id="nurse" name="nurse" value="nurse" />
+                <label htmlFor="nurse"> Enfermeiro (a)</label>
+                <br />
+                <input
+                  type="checkbox"
+                  id="generalServices"
+                  name="generalServices"
+                  value="generalServices"
+                />
+                <label htmlFor="generalServices"> Serviços gerais</label>
+                <br />
+                <input
+                  type="checkbox"
+                  id="hospitalAccompanying
+"
+                  name="hospitalAccompanying
+"
+                  value="hospitalAccompanying"
+                />
+                <label
+                  htmlFor="hospitalAccompanying
+"
+                >
+                  Acompanhante hospitalar
+                </label>
+                <br />
+                <input
+                  type="checkbox"
+                  id="financialHelper"
+                  name="financialHelper"
+                  value="financialHelper"
+                />
+                <label htmlFor="financialHelper"> Ajudante Financeiro</label>
+                <br />
+                <input
+                  type="checkbox"
+                  id="interceptor"
+                  name="interceptor"
+                  value="interceptor"
+                />
+                <label htmlFor="interceptor"> Intercessor</label>
+                <br />
+                <input
+                  type="checkbox"
+                  id="civilManualWorker"
+                  name="civilManualWorker"
+                  value="civilManualWorker"
+                />
+                <label htmlFor="civilManualWorker"> Pedreiro</label>
+                <br />
+                <input
+                  type="checkbox"
+                  id="carpinter"
+                  name="carpinter"
+                  value="carpinter"
+                />
+                <label htmlFor="carpinter"> Carpinteiro</label>
+                <br />
+              </CheckBoxContainer>
+              <Input name="otherHabilities" placeholder="OUTROS" />
             </Form>
           )}
+
+          <ButtonContainer>
+            <Button
+              textColor="#DA4453"
+              text="VOLTAR"
+              backgroundColor="#f9f9f9"
+              type="submit"
+              borderColor="#DA4453"
+              width="34"
+            />
+            <Button
+              textColor="#f9f9f9"
+              text={formStage === '3' ? 'CADASTRAR' : 'VOLTAR'}
+              backgroundColor="#DA4453"
+              type="submit"
+              borderColor="#DA4453"
+              width="65"
+            />
+          </ButtonContainer>
 
           {/* <Link to="/"> */}
 
