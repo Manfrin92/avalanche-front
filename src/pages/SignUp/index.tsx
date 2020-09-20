@@ -5,6 +5,7 @@ import { FiMail, FiLock, FiUser, FiCreditCard } from 'react-icons/fi';
 import { AiOutlineWhatsApp } from 'react-icons/all';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
+import { toast, ToastContainer } from 'react-toastify';
 import * as Yup from 'yup';
 // import { Link, useHistory } from 'react-router-dom';
 import getValidationErros from '../../utils/getValidationErros';
@@ -38,11 +39,12 @@ const SignUp: React.FC = () => {
   const firstPartRef = useRef<FormHandles>(null);
   const secondPartRef = useRef<FormHandles>(null);
   const thirdPartRef = useRef<FormHandles>(null);
-  const [formStage, setFormStage] = useState('3');
+  const [formStage, setFormStage] = useState('1');
+  const [habilities, setHabilities] = useState([]);
+  const { addToast } = useToast();
 
   const [user, setUser] = useState({} as SignUpUser);
 
-  const { addToast } = useToast();
   // const history = useHistory();
 
   const handleSubmitFirstPart = useCallback(
@@ -71,24 +73,32 @@ const SignUp: React.FC = () => {
 
         // history.push('/');
 
-        addToast({
-          type: 'success',
-          title: 'Cadastro realizado com sucesso',
-          description: 'Você já pode fazer seu logon',
+        toast.success('Cadastro realizado com sucesso', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
+
+        // addToast({
+        //   type: 'success',
+        //   title: 'Cadastro realizado com sucesso',
+        //   description: 'Você já pode fazer seu logon',
+        // });
       } catch (e) {
         if (e instanceof Yup.ValidationError) {
           const errors = getValidationErros(e);
           firstPartRef.current?.setErrors(errors);
-
-          return;
         }
 
-        addToast({
-          type: 'error',
-          title: 'Erro no cadastro',
-          description: 'Ocorreu um erro ao fazer seu cadastro',
-        });
+        // addToast({
+        //   type: 'error',
+        //   title: 'Erro no cadastro',
+        //   description: 'Ocorreu um erro ao fazer seu cadastro',
+        // });
       }
     },
     [addToast, user],
@@ -101,10 +111,10 @@ const SignUp: React.FC = () => {
 
         const schema = Yup.object().shape({
           cep: Yup.string().required('CEP obrigatório'),
-          AddressStreet: Yup.string().required('Rua obrigatóia'),
-          AddressArea: Yup.string().required('Bairro obrigatório'),
-          City: Yup.string().required('Cidade obrigatória'),
-          State: Yup.string().required('Estado obrigatório'),
+          addressStreet: Yup.string().required('Rua obrigatóia'),
+          addressArea: Yup.string().required('Bairro obrigatório'),
+          city: Yup.string().required('Cidade obrigatória'),
+          state: Yup.string().required('Estado obrigatório'),
         });
 
         await schema.validate(data, {
@@ -186,6 +196,12 @@ const SignUp: React.FC = () => {
             formPart={formStage}
           />
 
+<ToastContainer
+  containerId="an id"
+  draggable={false}
+  {/* etc... */}
+/>
+
           {formStage === '1' ? (
             <Form ref={firstPartRef} onSubmit={handleSubmitFirstPart}>
               <Input name="name" icon={FiUser} placeholder="Nome" />
@@ -202,16 +218,66 @@ const SignUp: React.FC = () => {
                 type="password"
                 placeholder="Senha"
               />
+
+              <ButtonContainer>
+                <Button
+                  textColor="#DA4453"
+                  text="VOLTAR"
+                  backgroundColor="#f9f9f9"
+                  type="submit"
+                  borderColor="#DA4453"
+                  width="33"
+                  onClick={() => {
+                    setFormStage('2');
+                  }}
+                />
+                <Button
+                  textColor="#f9f9f9"
+                  text="PRÓXIMO"
+                  backgroundColor="#DA4453"
+                  type="submit"
+                  borderColor="#DA4453"
+                  width="64"
+                  onClick={() => {
+                    firstPartRef.current?.submitForm();
+                  }}
+                />
+              </ButtonContainer>
             </Form>
           ) : formStage === '2' ? (
             <Form ref={secondPartRef} onSubmit={handleSubmitSecondPart}>
               <Input name="cep" placeholder="CEP" />
-              <Input name="street" placeholder="RUA" />
+              <Input name="addressStreet" placeholder="RUA" />
               <Input name="streetNumber" placeholder="NÚMERO" />
               <Input name="streetComplement" placeholder="COMPLEMENTO" />
-              <Input name="bairro" placeholder="BAIRRO" />
+              <Input name="addressArea" placeholder="BAIRRO" />
               <Input name="city" placeholder="CIDADE" />
               <Input name="state" placeholder="ESTADO" />
+
+              <ButtonContainer>
+                <Button
+                  textColor="#DA4453"
+                  text="VOLTAR"
+                  backgroundColor="#f9f9f9"
+                  type="submit"
+                  borderColor="#DA4453"
+                  width="33"
+                  onClick={() => {
+                    setFormStage('2');
+                  }}
+                />
+                <Button
+                  textColor="#f9f9f9"
+                  text="PRÓXIMO"
+                  backgroundColor="#DA4453"
+                  type="submit"
+                  borderColor="#DA4453"
+                  width="64"
+                  onClick={() => {
+                    secondPartRef.current?.submitForm();
+                  }}
+                />
+              </ButtonContainer>
             </Form>
           ) : (
             <Form ref={thirdPartRef} onSubmit={handleSubmitThirdPart}>
@@ -297,45 +363,33 @@ const SignUp: React.FC = () => {
                 <br />
               </CheckBoxContainer>
               <Input name="otherHabilities" placeholder="OUTROS" />
+
+              <ButtonContainer>
+                <Button
+                  textColor="#DA4453"
+                  text="VOLTAR"
+                  backgroundColor="#f9f9f9"
+                  type="submit"
+                  borderColor="#DA4453"
+                  width="33"
+                  onClick={() => {
+                    setFormStage('2');
+                  }}
+                />
+                <Button
+                  textColor="#f9f9f9"
+                  text="CADASTRAR"
+                  backgroundColor="#DA4453"
+                  type="submit"
+                  borderColor="#DA4453"
+                  width="64"
+                  onClick={() => {
+                    thirdPartRef.current?.submitForm();
+                  }}
+                />
+              </ButtonContainer>
             </Form>
           )}
-
-          <ButtonContainer>
-            <Button
-              textColor="#DA4453"
-              text="VOLTAR"
-              backgroundColor="#f9f9f9"
-              type="submit"
-              borderColor="#DA4453"
-              width="33"
-              onClick={() => {
-                if (formStage === '1') {
-                  console.log('voltar tela');
-                } else if (formStage === '2') {
-                  setFormStage('1');
-                } else {
-                  setFormStage('2');
-                }
-              }}
-            />
-            <Button
-              textColor="#f9f9f9"
-              text={formStage === '3' ? 'CADASTRAR' : 'PRÓXIMO'}
-              backgroundColor="#DA4453"
-              type="submit"
-              borderColor="#DA4453"
-              width="64"
-              onClick={() => {
-                if (formStage === '1') {
-                  setFormStage('2');
-                } else if (formStage === '2') {
-                  setFormStage('3');
-                } else {
-                  console.log('cadastrar');
-                }
-              }}
-            />
-          </ButtonContainer>
 
           {/* <Link to="/"> */}
 
