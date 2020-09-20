@@ -33,14 +33,14 @@ export const Container = styled.div<ContainerProps>`
   ${props =>
     props.isFocused &&
     css`
-      color: #ffc170;
-      border-color: #ffc170;
+      color: #da4453;
+      border-color: #da4453;
     `}
 
   ${props =>
     props.isFilled &&
     css`
-      color: #fff;
+      color: #da4453;
     `}
 
 
@@ -48,7 +48,7 @@ export const Container = styled.div<ContainerProps>`
     flex: 1;
     border: 0;
     background: transparent;
-    color: #fff;
+    color: #da4453;
 
     &::placeholder {
       color: #ed5565;

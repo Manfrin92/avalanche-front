@@ -6,11 +6,10 @@ import signUpBackgroundImg from '../../assets/sign-in-background.jpg';
 export const Container = styled.div`
   height: 100vh;
   display: flex;
-  align-items: stretch;
+  /* align-items: stretch; */
 `;
 
 export const CheckBoxContainer = styled.div`
-  background-color: lightblue;
   color: #434a54;
   font-weight: 400px;
   font-size: 22px;
@@ -35,7 +34,7 @@ export const HeaderContainer = styled.div`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  align-items: center;
+  width: 100%;
   justify-content: space-between;
 `;
 
@@ -47,26 +46,6 @@ export const Content = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 700px;
-
-  > a {
-    color: #ff9000;
-    display: block;
-    margin-top: 8px;
-
-    text-decoration: none;
-    transition: color 0.2s;
-
-    display: flex;
-    align-items: center;
-
-    svg {
-      margin-right: 16px;
-    }
-
-    &:hover {
-      color: ${shade(0.2, '#ff9000')};
-    }
-  }
 `;
 
 const appearFromRight = keyframes`

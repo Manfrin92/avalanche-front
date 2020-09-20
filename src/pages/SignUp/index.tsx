@@ -17,6 +17,12 @@ import InputCheckbox from '../../components/InputCheckbox';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
 // import api from '../../services/api';
+import {
+  SignUpData as SignUpUser,
+  FirstPartFormData,
+  SecondPartFormData,
+  ThirdPartFormData,
+} from '../../utils/interfaces';
 
 import {
   Container,
@@ -28,24 +34,21 @@ import {
   ThirdPartTitle,
 } from './styles';
 
-interface DataProps {
-  name: string;
-  email: string;
-  password: string;
-}
-
 const SignUp: React.FC = () => {
   const firstPartRef = useRef<FormHandles>(null);
   const secondPartRef = useRef<FormHandles>(null);
   const thirdPartRef = useRef<FormHandles>(null);
-
   const [formStage, setFormStage] = useState('3');
+
+  const [user, setUser] = useState({} as SignUpUser);
+
   const { addToast } = useToast();
   // const history = useHistory();
 
   const handleSubmitFirstPart = useCallback(
-    async (data: DataProps): Promise<void> => {
+    async (data: FirstPartFormData): Promise<void> => {
       try {
+        console.log('cadastro até esse momento: ', data);
         firstPartRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
@@ -53,6 +56,8 @@ const SignUp: React.FC = () => {
           email: Yup.string()
             .required('E-mail obrigatóio')
             .email('Digite um e-mail válido'),
+          cpf: Yup.string().required('CPF obrigatório'),
+          phone: Yup.string().min(8, 'Telefone obrigatório'),
           password: Yup.string().min(6, 'Senha com no mínimo 6 valores'),
         });
 
@@ -60,7 +65,7 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        console.log('cadastro: ', data);
+        setUser({ ...user, name: data.name, email: data.email });
 
         // await api.post('/users', data);
 
@@ -86,27 +91,36 @@ const SignUp: React.FC = () => {
         });
       }
     },
-    [addToast],
+    [addToast, user],
   );
 
   const handleSubmitSecondPart = useCallback(
-    async (data: DataProps): Promise<void> => {
+    async (data: SecondPartFormData): Promise<void> => {
       try {
         secondPartRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-          email: Yup.string()
-            .required('E-mail obrigatóio')
-            .email('Digite um e-mail válido'),
-          password: Yup.string().min(6, 'Senha com no mínimo 6 valores'),
+          cep: Yup.string().required('CEP obrigatório'),
+          AddressStreet: Yup.string().required('Rua obrigatóia'),
+          AddressArea: Yup.string().required('Bairro obrigatório'),
+          City: Yup.string().required('Cidade obrigatória'),
+          State: Yup.string().required('Estado obrigatório'),
         });
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        console.log('cadastro: ', data);
+        console.log('cadastro até o segundo: ', data);
+
+        setUser({
+          ...user,
+          cep: data.cep,
+          addressStreet: data.addressStreet,
+          adressArea: data.adressArea,
+          city: data.city,
+          state: data.state,
+        });
 
         // await api.post('/users', data);
 
@@ -132,27 +146,15 @@ const SignUp: React.FC = () => {
         });
       }
     },
-    [addToast],
+    [addToast, user],
   );
 
   const handleSubmitThirdPart = useCallback(
-    async (data: DataProps): Promise<void> => {
+    async (data: ThirdPartFormData): Promise<void> => {
       try {
-        thirdPartRef.current?.setErrors({});
+        setUser({ ...user, otherHabilities: data.otherHabilities });
 
-        const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-          email: Yup.string()
-            .required('E-mail obrigatóio')
-            .email('Digite um e-mail válido'),
-          password: Yup.string().min(6, 'Senha com no mínimo 6 valores'),
-        });
-
-        await schema.validate(data, {
-          abortEarly: false,
-        });
-
-        console.log('cadastro: ', data);
+        console.log('cadastro até o terceiro: ', user);
 
         // await api.post('/users', data);
 
@@ -164,13 +166,6 @@ const SignUp: React.FC = () => {
           description: 'Você já pode fazer seu logon',
         });
       } catch (e) {
-        if (e instanceof Yup.ValidationError) {
-          const errors = getValidationErros(e);
-          thirdPartRef.current?.setErrors(errors);
-
-          return;
-        }
-
         addToast({
           type: 'error',
           title: 'Erro no cadastro',
@@ -178,7 +173,7 @@ const SignUp: React.FC = () => {
         });
       }
     },
-    [addToast],
+    [addToast, user],
   );
 
   return (
@@ -217,25 +212,6 @@ const SignUp: React.FC = () => {
               <Input name="bairro" placeholder="BAIRRO" />
               <Input name="city" placeholder="CIDADE" />
               <Input name="state" placeholder="ESTADO" />
-
-              <ButtonContainer>
-                <Button
-                  textColor="#DA4453"
-                  text="VOLTAR"
-                  backgroundColor="#f9f9f9"
-                  type="submit"
-                  borderColor="#DA4453"
-                  width="34"
-                />
-                <Button
-                  textColor="#f9f9f9"
-                  text="PRÓXIMO"
-                  backgroundColor="#DA4453"
-                  type="submit"
-                  borderColor="#DA4453"
-                  width="65"
-                />
-              </ButtonContainer>
             </Form>
           ) : (
             <Form ref={thirdPartRef} onSubmit={handleSubmitThirdPart}>
@@ -331,15 +307,33 @@ const SignUp: React.FC = () => {
               backgroundColor="#f9f9f9"
               type="submit"
               borderColor="#DA4453"
-              width="34"
+              width="33"
+              onClick={() => {
+                if (formStage === '1') {
+                  console.log('voltar tela');
+                } else if (formStage === '2') {
+                  setFormStage('1');
+                } else {
+                  setFormStage('2');
+                }
+              }}
             />
             <Button
               textColor="#f9f9f9"
-              text={formStage === '3' ? 'CADASTRAR' : 'VOLTAR'}
+              text={formStage === '3' ? 'CADASTRAR' : 'PRÓXIMO'}
               backgroundColor="#DA4453"
               type="submit"
               borderColor="#DA4453"
-              width="65"
+              width="64"
+              onClick={() => {
+                if (formStage === '1') {
+                  setFormStage('2');
+                } else if (formStage === '2') {
+                  setFormStage('3');
+                } else {
+                  console.log('cadastrar');
+                }
+              }}
             />
           </ButtonContainer>
 
