@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default createGlobalStyle`
   * {
@@ -26,4 +27,17 @@ export default createGlobalStyle`
   button {
     cursor: pointer;
   }
+
+  .Toastify__toast--success {
+    background: #00A57C !important;
+    font: 14px Montserrat, sans-serif !important;
+    font-weight: 600 !important;
+}
+
+.Toastify__toast--error {
+    background: #de3b3b !important;
+    font: 14px Montserrat, sans-serif !important;
+    font-weight: 600 !important;
+}
+
 `;
