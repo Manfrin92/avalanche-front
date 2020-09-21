@@ -1,19 +1,21 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-nested-ternary */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FiMail, FiLock, FiUser, FiCreditCard } from 'react-icons/fi';
-import { AiOutlineWhatsApp } from 'react-icons/all';
+import { AiOutlineWhatsApp, GiConsoleController } from 'react-icons/all';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 // import { Link, useHistory } from 'react-router-dom';
 import getValidationErros from '../../utils/getValidationErros';
+import { states } from '../../utils/Type';
 
 // import logoImg from '../../assets/avalanche.svg';
 
 import Input from '../../components/Input';
-import InputCheckbox from '../../components/InputCheckbox';
+import InputMask from '../../components/Input/InputMask';
+import Select from '../../components/Select';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
 // import api from '../../services/api';
@@ -37,17 +39,37 @@ const SignUp: React.FC = () => {
   const firstPartRef = useRef<FormHandles>(null);
   const secondPartRef = useRef<FormHandles>(null);
   const thirdPartRef = useRef<FormHandles>(null);
+  const [formTitle, setFormTitle] = useState('');
   const [formStage, setFormStage] = useState('1');
   const [habilities, setHabilities] = useState([]);
 
   const [user, setUser] = useState({} as SignUpUser);
 
   // const history = useHistory();
+  const setTitle = useCallback(() => {
+    if (formStage === '1') {
+      setFormTitle('');
+      return;
+    }
+    if (formStage === '2') {
+      setFormTitle('Endereço');
+      return;
+    }
+    setFormTitle('Habilidades');
+  }, [formStage]);
+
+  const checkEmailAndCpf = useCallback(async (email: string, cpf: string) => {
+    try {
+      console.log(`BUSCAR DB POR CPF E EMAIL DIGITADOS${email}${cpf}`);
+    } catch (e) {
+      console.log('ERRO AO BUSCAR DB');
+      toast.error('Houve um erro ao buscar CPF e E-mail digitados!');
+    }
+  }, []);
 
   const handleSubmitFirstPart = useCallback(
     async (data: FirstPartFormData): Promise<void> => {
       try {
-        console.log('cadastro até esse momento: ', data);
         firstPartRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
@@ -65,17 +87,12 @@ const SignUp: React.FC = () => {
         });
 
         setUser({ ...user, name: data.name, email: data.email });
-
-        // await api.post('/users', data).then(() => {
-        //   toast.success('Cadastro efetuado com sucesso');
-        // });
-
-        // history.push('/');
+        setFormStage('2');
+        setFormTitle('Endereço');
       } catch (e) {
         if (e instanceof Yup.ValidationError) {
           const errors = getValidationErros(e);
           firstPartRef.current?.setErrors(errors);
-          toast.error('Cadastro efetuado com sucesso');
         }
       }
     },
@@ -99,8 +116,6 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        console.log('cadastro até o segundo: ', data);
-
         setUser({
           ...user,
           cep: data.cep,
@@ -109,10 +124,8 @@ const SignUp: React.FC = () => {
           city: data.city,
           state: data.state,
         });
-
-        // await api.post('/users', data);
-
-        // history.push('/');
+        setFormStage('3');
+        setFormTitle('Habilidades');
       } catch (e) {
         if (e instanceof Yup.ValidationError) {
           const errors = getValidationErros(e);
@@ -128,35 +141,84 @@ const SignUp: React.FC = () => {
       try {
         setUser({ ...user, otherHabilities: data.otherHabilities });
 
-        console.log('cadastro até o terceiro: ', user);
+        console.log('Dados que serão enviados para o cadastro: ', user);
 
-        // await api.post('/users', data);
+        // await api.post('/users', user);
 
         // history.push('/');
+        console.log('cadastrar');
       } catch (e) {
-        console.log(e);
+        toast.error('Erro ao efetuar cadastro');
       }
     },
     [user],
   );
 
+  const getCep = useCallback(async () => {
+    let cep = secondPartRef.current?.getFieldValue('cep');
+    cep = cep.replace(/[^\d]/g, '');
+    if (cep === '' || cep.length < 8) {
+      toast.error('Digite um cep valido.');
+    } else {
+      // ESSA ROTA VAI SER DE OUTRO CAMINHO
+      // await api
+      //   .get(`/street/${cep}`)
+      //   .then(response => {
+      //     if (response.data !== '') {
+      //       if (response.data.clearPublicPlace === '') {
+      //         setDisableAddressFields(false);
+      //       } else {
+      //         setDisableAddressFields(true);
+      //       }
+      //       formRef.current?.setFieldValue(
+      //         'addressArea',
+      //         `${response.data.area.clearName}`,
+      //       );
+      //       formRef.current?.setFieldValue(
+      //         'addressCity',
+      //         `${response.data.city.clearName}`,
+      //       );
+      //       formRef.current?.setFieldValue(
+      //         'addressStreet',
+      //         `${response.data.clearPublicPlace}`,
+      //       );
+      //       formRef.current?.setFieldValue('addressState', {
+      //         value: response.data.stateId,
+      //         label: response.data.stateId,
+      //       });
+      //       const nameInput = formRef.current?.getFieldRef('addressNumber');
+      //       nameInput.focus();
+      //     } else {
+      //       toast.error('Digite um cep valido.');
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //     toast.error('Falha ao buscar cep');
+      //   });
+    }
+  }, []);
+
+  const handleKeyPress = useCallback(event => {
+    if (event.key === 'Enter') {
+      getCep();
+    }
+  }, []);
+
   return (
     <Container>
       <Background />
       <Content>
-        <Header
-          title={formStage === '2' ? 'Endereço' : 'Habilidades'}
-          formPart={formStage}
-        />
+        <Header title={formTitle} formPart={formStage} />
 
         {formStage === '1' ? (
           <Form ref={firstPartRef} onSubmit={handleSubmitFirstPart}>
             <Input name="name" icon={FiUser} placeholder="Nome" />
             <Input name="email" icon={FiMail} placeholder="E-mail" />
-            <Input name="cpf" icon={FiCreditCard} placeholder="CPF" />
-            <Input
+            <InputMask mask="999.999.999-99" name="cpf" placeholder="CPF" />
+            <InputMask
+              mask="(99)99999-9999"
               name="phone"
-              icon={AiOutlineWhatsApp}
               placeholder="Telefone"
             />
             <Input
@@ -175,7 +237,7 @@ const SignUp: React.FC = () => {
                 borderColor="#DA4453"
                 width="33"
                 onClick={() => {
-                  setFormStage('2');
+                  console.log('Voltar para inicio');
                 }}
               />
               <Button
@@ -193,13 +255,31 @@ const SignUp: React.FC = () => {
           </Form>
         ) : formStage === '2' ? (
           <Form ref={secondPartRef} onSubmit={handleSubmitSecondPart}>
-            <Input name="cep" placeholder="CEP" />
+            <InputMask
+              mask="99999-999"
+              name="cep"
+              placeholder="CEP"
+              cepIcon
+              getCep={getCep}
+              onKeyPress={handleKeyPress}
+            />
             <Input name="addressStreet" placeholder="RUA" />
             <Input name="streetNumber" placeholder="NÚMERO" />
             <Input name="streetComplement" placeholder="COMPLEMENTO" />
             <Input name="addressArea" placeholder="BAIRRO" />
             <Input name="city" placeholder="CIDADE" />
             <Input name="state" placeholder="ESTADO" />
+            {/* <Select
+              fieldValue="id"
+              fieldLabel="label"
+              name="state"
+              label="ESTADO"
+              placeholder="Selecione uma opção"
+              options={states}
+              className="react-select-container"
+              isClearable
+              isDisabled
+            /> */}
 
             <ButtonContainer>
               <Button
@@ -210,7 +290,7 @@ const SignUp: React.FC = () => {
                 borderColor="#DA4453"
                 width="33"
                 onClick={() => {
-                  setFormStage('2');
+                  setFormStage('1');
                 }}
               />
               <Button
