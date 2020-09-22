@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-nested-ternary */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FiMail, FiLock, FiUser, FiCreditCard } from 'react-icons/fi';
 import { AiOutlineWhatsApp, GiConsoleController } from 'react-icons/all';
@@ -8,6 +7,7 @@ import { FormHandles } from '@unform/core';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 // import { Link, useHistory } from 'react-router-dom';
+import Axios from 'axios';
 import getValidationErros from '../../utils/getValidationErros';
 import { states } from '../../utils/Type';
 
@@ -46,23 +46,15 @@ const SignUp: React.FC = () => {
   const [user, setUser] = useState({} as SignUpUser);
 
   // const history = useHistory();
-  const setTitle = useCallback(() => {
-    if (formStage === '1') {
-      setFormTitle('');
-      return;
-    }
-    if (formStage === '2') {
-      setFormTitle('Endereço');
-      return;
-    }
-    setFormTitle('Habilidades');
-  }, [formStage]);
 
   const checkEmailAndCpf = useCallback(async (email: string, cpf: string) => {
     try {
-      console.log(`BUSCAR DB POR CPF E EMAIL DIGITADOS${email}${cpf}`);
+      const { logradouro, bairro, localidade, uf } = await Axios.get(
+        'http://www.viacep.com.br/ws/81320000/json/',
+      );
+
+      console.log('logradouro: ', logradouro);
     } catch (e) {
-      console.log('ERRO AO BUSCAR DB');
       toast.error('Houve um erro ao buscar CPF e E-mail digitados!');
     }
   }, []);
@@ -72,21 +64,37 @@ const SignUp: React.FC = () => {
       try {
         firstPartRef.current?.setErrors({});
 
-        const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-          email: Yup.string()
-            .required('E-mail obrigatóio')
-            .email('Digite um e-mail válido'),
-          cpf: Yup.string().required('CPF obrigatório'),
-          phone: Yup.string().min(8, 'Telefone obrigatório'),
-          password: Yup.string().min(6, 'Senha com no mínimo 6 valores'),
+        // const schema = Yup.object().shape({
+        //   name: Yup.string().required('Nome obrigatório'),
+        //   email: Yup.string()
+        //     .required('E-mail obrigatóio')
+        //     .email('Digite um e-mail válido'),
+        //   cpf: Yup.string().required('CPF obrigatório'),
+        //   phone: Yup.string().min(8, 'Telefone obrigatório'),
+        //   password: Yup.string().min(6, 'Senha com no mínimo 6 valores'),
+        // });
+
+        // await schema.validate(data, {
+        //   abortEarly: false,
+        // });
+
+        setUser({
+          ...user,
+          name: data.name,
+          email: data.email,
+          cpf: data.cpf,
+          phone: data.phone,
+          password: data.password,
         });
 
-        await schema.validate(data, {
-          abortEarly: false,
+        console.log({
+          ...user,
+          name: data.name,
+          email: data.email,
+          cpf: data.cpf,
+          phone: data.phone,
+          password: data.password,
         });
-
-        setUser({ ...user, name: data.name, email: data.email });
         setFormStage('2');
         setFormTitle('Endereço');
       } catch (e) {
@@ -104,23 +112,32 @@ const SignUp: React.FC = () => {
       try {
         secondPartRef.current?.setErrors({});
 
-        const schema = Yup.object().shape({
-          cep: Yup.string().required('CEP obrigatório'),
-          addressStreet: Yup.string().required('Rua obrigatóia'),
-          addressArea: Yup.string().required('Bairro obrigatório'),
-          city: Yup.string().required('Cidade obrigatória'),
-          state: Yup.string().required('Estado obrigatório'),
-        });
+        // const schema = Yup.object().shape({
+        //   cep: Yup.string().required('CEP obrigatório'),
+        //   addressStreet: Yup.string().required('Rua obrigatóia'),
+        //   addressArea: Yup.string().required('Bairro obrigatório'),
+        //   city: Yup.string().required('Cidade obrigatória'),
+        //   state: Yup.string().required('Estado obrigatório'),
+        // });
 
-        await schema.validate(data, {
-          abortEarly: false,
-        });
+        // await schema.validate(data, {
+        //   abortEarly: false,
+        // });
 
-        setUser({
+        setUser(prevState => ({
+          ...prevState,
+          cep: data.cep,
+          addressStreet: data.addressStreet,
+          addressArea: data.addressArea,
+          city: data.city,
+          state: data.state,
+        }));
+
+        console.log({
           ...user,
           cep: data.cep,
           addressStreet: data.addressStreet,
-          adressArea: data.adressArea,
+          addressArea: data.addressArea,
           city: data.city,
           state: data.state,
         });
@@ -139,7 +156,10 @@ const SignUp: React.FC = () => {
   const handleSubmitThirdPart = useCallback(
     async (data: ThirdPartFormData): Promise<void> => {
       try {
-        setUser({ ...user, otherHabilities: data.otherHabilities });
+        setUser(prevState => ({
+          ...prevState,
+          otherHabilities: data.otherHabilities,
+        }));
 
         console.log('Dados que serão enviados para o cadastro: ', user);
 
@@ -160,42 +180,31 @@ const SignUp: React.FC = () => {
     if (cep === '' || cep.length < 8) {
       toast.error('Digite um cep valido.');
     } else {
-      // ESSA ROTA VAI SER DE OUTRO CAMINHO
-      // await api
-      //   .get(`/street/${cep}`)
-      //   .then(response => {
-      //     if (response.data !== '') {
-      //       if (response.data.clearPublicPlace === '') {
-      //         setDisableAddressFields(false);
-      //       } else {
-      //         setDisableAddressFields(true);
-      //       }
-      //       formRef.current?.setFieldValue(
-      //         'addressArea',
-      //         `${response.data.area.clearName}`,
-      //       );
-      //       formRef.current?.setFieldValue(
-      //         'addressCity',
-      //         `${response.data.city.clearName}`,
-      //       );
-      //       formRef.current?.setFieldValue(
-      //         'addressStreet',
-      //         `${response.data.clearPublicPlace}`,
-      //       );
-      //       formRef.current?.setFieldValue('addressState', {
-      //         value: response.data.stateId,
-      //         label: response.data.stateId,
-      //       });
-      //       const nameInput = formRef.current?.getFieldRef('addressNumber');
-      //       nameInput.focus();
-      //     } else {
-      //       toast.error('Digite um cep valido.');
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //     toast.error('Falha ao buscar cep');
-      //   });
+      try {
+        const response = await Axios.get(
+          `https://viacep.com.br/ws/${cep}/json/`,
+        );
+
+        if (response.data.erro === true) {
+          toast.error('CEP não encontrado');
+        } else {
+          const { logradouro, bairro, localidade, uf } = response.data;
+
+          secondPartRef.current?.setFieldValue(
+            'addressStreet',
+            `${logradouro}`,
+          );
+          secondPartRef.current?.setFieldValue('addressArea', `${bairro}`);
+          secondPartRef.current?.setFieldValue('city', `${localidade}`);
+          secondPartRef.current?.setFieldValue('state', {
+            value: uf,
+            label: uf,
+          });
+        }
+      } catch (err) {
+        console.log('Erro ao consultar CEP no validador', err);
+        toast.error('Erro ao consultar CEP no validador');
+      }
     }
   }, []);
 
@@ -211,7 +220,7 @@ const SignUp: React.FC = () => {
       <Content>
         <Header title={formTitle} formPart={formStage} />
 
-        {formStage === '1' ? (
+        {formStage === '1' && (
           <Form ref={firstPartRef} onSubmit={handleSubmitFirstPart}>
             <Input name="name" icon={FiUser} placeholder="Nome" />
             <Input name="email" icon={FiMail} placeholder="E-mail" />
@@ -233,7 +242,7 @@ const SignUp: React.FC = () => {
                 textColor="#DA4453"
                 text="VOLTAR"
                 backgroundColor="#f9f9f9"
-                type="submit"
+                type="button"
                 borderColor="#DA4453"
                 width="33"
                 onClick={() => {
@@ -244,7 +253,7 @@ const SignUp: React.FC = () => {
                 textColor="#f9f9f9"
                 text="PRÓXIMO"
                 backgroundColor="#DA4453"
-                type="submit"
+                type="button"
                 borderColor="#DA4453"
                 width="64"
                 onClick={() => {
@@ -253,7 +262,9 @@ const SignUp: React.FC = () => {
               />
             </ButtonContainer>
           </Form>
-        ) : formStage === '2' ? (
+        )}
+
+        {formStage === '2' && (
           <Form ref={secondPartRef} onSubmit={handleSubmitSecondPart}>
             <InputMask
               mask="99999-999"
@@ -268,8 +279,7 @@ const SignUp: React.FC = () => {
             <Input name="streetComplement" placeholder="COMPLEMENTO" />
             <Input name="addressArea" placeholder="BAIRRO" />
             <Input name="city" placeholder="CIDADE" />
-            <Input name="state" placeholder="ESTADO" />
-            {/* <Select
+            <Select
               fieldValue="id"
               fieldLabel="label"
               name="state"
@@ -278,15 +288,14 @@ const SignUp: React.FC = () => {
               options={states}
               className="react-select-container"
               isClearable
-              isDisabled
-            /> */}
+            />
 
             <ButtonContainer>
               <Button
                 textColor="#DA4453"
                 text="VOLTAR"
                 backgroundColor="#f9f9f9"
-                type="submit"
+                type="button"
                 borderColor="#DA4453"
                 width="33"
                 onClick={() => {
@@ -297,7 +306,7 @@ const SignUp: React.FC = () => {
                 textColor="#f9f9f9"
                 text="PRÓXIMO"
                 backgroundColor="#DA4453"
-                type="submit"
+                type="button"
                 borderColor="#DA4453"
                 width="64"
                 onClick={() => {
@@ -306,7 +315,9 @@ const SignUp: React.FC = () => {
               />
             </ButtonContainer>
           </Form>
-        ) : (
+        )}
+
+        {formStage === '3' && (
           <Form ref={thirdPartRef} onSubmit={handleSubmitThirdPart}>
             <ThirdPartTitle>Posso ajudar sendo</ThirdPartTitle>
 
@@ -386,7 +397,7 @@ const SignUp: React.FC = () => {
                 textColor="#DA4453"
                 text="VOLTAR"
                 backgroundColor="#f9f9f9"
-                type="submit"
+                type="button"
                 borderColor="#DA4453"
                 width="33"
                 onClick={() => {
@@ -397,7 +408,7 @@ const SignUp: React.FC = () => {
                 textColor="#f9f9f9"
                 text="CADASTRAR"
                 backgroundColor="#DA4453"
-                type="submit"
+                type="button"
                 borderColor="#DA4453"
                 width="64"
                 onClick={() => {

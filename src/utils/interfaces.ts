@@ -7,8 +7,8 @@ export interface SignUpData {
   cep: string;
   addressStreet: string;
   addressNumber?: string;
-  adressComplement?: string;
-  adressArea: string;
+  addressComplement?: string;
+  addressArea: string;
   city: string;
   state: string;
   otherHabilities?: string;
@@ -26,8 +26,8 @@ export interface SecondPartFormData {
   cep: string;
   addressStreet: string;
   addressNumber?: string;
-  adressComplement?: string;
-  adressArea: string;
+  addressComplement?: string;
+  addressArea: string;
   city: string;
   state: string;
 }
