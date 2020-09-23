@@ -18,7 +18,7 @@ import InputMask from '../../components/Input/InputMask';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
-// import api from '../../services/api';
+import api from '../../services/api';
 import {
   SignUpData as SignUpUser,
   FirstPartFormData,
@@ -36,14 +36,13 @@ import {
 } from './styles';
 
 const SignUp: React.FC = () => {
+  const [user, setUser] = useState({} as SignUpUser);
   const firstPartRef = useRef<FormHandles>(null);
   const secondPartRef = useRef<FormHandles>(null);
   const thirdPartRef = useRef<FormHandles>(null);
   const [formTitle, setFormTitle] = useState('');
   const [formStage, setFormStage] = useState('1');
   const [habilities, setHabilities] = useState([]);
-
-  const [user, setUser] = useState({} as SignUpUser);
 
   // const history = useHistory();
 
@@ -64,19 +63,19 @@ const SignUp: React.FC = () => {
       try {
         firstPartRef.current?.setErrors({});
 
-        // const schema = Yup.object().shape({
-        //   name: Yup.string().required('Nome obrigatório'),
-        //   email: Yup.string()
-        //     .required('E-mail obrigatóio')
-        //     .email('Digite um e-mail válido'),
-        //   cpf: Yup.string().required('CPF obrigatório'),
-        //   phone: Yup.string().min(8, 'Telefone obrigatório'),
-        //   password: Yup.string().min(6, 'Senha com no mínimo 6 valores'),
-        // });
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome obrigatório'),
+          email: Yup.string()
+            .required('E-mail obrigatóio')
+            .email('Digite um e-mail válido'),
+          cpf: Yup.string().required('CPF obrigatório'),
+          phone: Yup.string().min(8, 'Telefone obrigatório'),
+          password: Yup.string().min(6, 'Senha com no mínimo 6 valores'),
+        });
 
-        // await schema.validate(data, {
-        //   abortEarly: false,
-        // });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
         setUser({
           ...user,
@@ -87,14 +86,6 @@ const SignUp: React.FC = () => {
           password: data.password,
         });
 
-        console.log({
-          ...user,
-          name: data.name,
-          email: data.email,
-          cpf: data.cpf,
-          phone: data.phone,
-          password: data.password,
-        });
         setFormStage('2');
         setFormTitle('Endereço');
       } catch (e) {
@@ -112,17 +103,17 @@ const SignUp: React.FC = () => {
       try {
         secondPartRef.current?.setErrors({});
 
-        // const schema = Yup.object().shape({
-        //   cep: Yup.string().required('CEP obrigatório'),
-        //   addressStreet: Yup.string().required('Rua obrigatóia'),
-        //   addressArea: Yup.string().required('Bairro obrigatório'),
-        //   city: Yup.string().required('Cidade obrigatória'),
-        //   state: Yup.string().required('Estado obrigatório'),
-        // });
+        const schema = Yup.object().shape({
+          cep: Yup.string().required('CEP obrigatório'),
+          addressStreet: Yup.string().required('Rua obrigatóia'),
+          addressArea: Yup.string().required('Bairro obrigatório'),
+          city: Yup.string().required('Cidade obrigatória'),
+          state: Yup.string().required('Estado obrigatório'),
+        });
 
-        // await schema.validate(data, {
-        //   abortEarly: false,
-        // });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
         setUser(prevState => ({
           ...prevState,
@@ -133,14 +124,6 @@ const SignUp: React.FC = () => {
           state: data.state,
         }));
 
-        console.log({
-          ...user,
-          cep: data.cep,
-          addressStreet: data.addressStreet,
-          addressArea: data.addressArea,
-          city: data.city,
-          state: data.state,
-        });
         setFormStage('3');
         setFormTitle('Habilidades');
       } catch (e) {
@@ -156,17 +139,11 @@ const SignUp: React.FC = () => {
   const handleSubmitThirdPart = useCallback(
     async (data: ThirdPartFormData): Promise<void> => {
       try {
-        setUser(prevState => ({
-          ...prevState,
-          otherHabilities: data.otherHabilities,
-        }));
+        await api.post('/user', user);
 
-        console.log('Dados que serão enviados para o cadastro: ', user);
-
-        // await api.post('/users', user);
+        toast.success('Usuário cadastrado com sucesso!');
 
         // history.push('/');
-        console.log('cadastrar');
       } catch (e) {
         toast.error('Erro ao efetuar cadastro');
       }
